@@ -1,9 +1,12 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Button } from 'react-native-paper';
 
 export const HomeScreen = () => {
   return (
     <View>
-      <Text>HomeScreen</Text>
+      <Button mode="contained" onPress={() => console.log('this is a test')}>
+        Test
+      </Button>
     </View>
   );
 };

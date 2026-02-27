@@ -1,13 +1,10 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { ThemeContextProvider } from './presentation/context/ThemeContext';
 import { StackNavigator } from './presentation/navigator/StackNavigator';
-import { PaperProvider } from 'react-native-paper';
 
 export const PokedexApp = () => {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <StackNavigator />
-      </NavigationContainer>
-    </PaperProvider>
+    <ThemeContextProvider>
+      <StackNavigator />
+    </ThemeContextProvider>
   );
 };

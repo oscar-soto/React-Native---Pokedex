@@ -1,29 +1,42 @@
-import { View } from 'react-native';
-import { ActivityIndicator, Button, Text } from 'react-native-paper';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
+import { useQuery } from '@tanstack/react-query';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getPokemons } from '../../../actions/pokemons';
-import { useQuery } from '@tanstack/react-query';
+import { PokeballBg } from '../../components/ui';
+import { globalTheme } from '../../../config/theme';
+import { PokemonCard } from '../../components/pokemon';
 
 export const HomeScreen = () => {
-  const { isLoading, data } = useQuery({
+  const { top } = useSafeAreaInsets();
+
+  const { data: pokemons } = useQuery({
     queryKey: ['pokemons'],
-    queryFn: () => getPokemons(0, 10),
+    queryFn: () => getPokemons(0, 20),
     staleTime: 1000 * 60 * 60,
   });
 
-  console.log(data);
-
   return (
-    <View>
-      <Text>Home Screen</Text>
+    <View style={globalTheme.globalMargin}>
+      <PokeballBg style={sytles.imgPosition} />
 
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <Button mode="contained" onPress={() => console.log('this is a test')}>
-          Test
-        </Button>
-      )}
+      <FlatList
+        data={pokemons}
+        keyExtractor={(pokemon, index) => `${pokemon.id}-${index}`}
+        numColumns={2}
+        style={{ paddingTop: top + 20 }}
+        ListHeaderComponent={<Text variant="displayMedium">Pokedex</Text>}
+        renderItem={({ item }) => <PokemonCard pokemon={item} />}
+      />
     </View>
   );
 };
+
+const sytles = StyleSheet.create({
+  imgPosition: {
+    position: 'absolute',
+    top: -100,
+    right: -100,
+  },
+});

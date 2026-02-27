@@ -1,35 +1,47 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
 import { Pokemon } from '../../../domain/entities/pokemon';
 import { FadeInImage } from '../ui';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../../navigator/StackNavigator';
 
 interface Props {
   pokemon: Pokemon;
 }
 
 export const PokemonCard = ({ pokemon }: Props) => {
+  const navigaton = useNavigation<NavigationProp<RootStackParams>>();
+
+  const onNavigationPress = () => {
+    navigaton.navigate('PokemonScreen', {
+      pokemonId: pokemon.id,
+    });
+  };
+
   return (
-    <Card style={[styles.cardContainer, { backgroundColor: pokemon.color }]}>
-      <Text style={styles.name} variant="bodyLarge" lineBreakMode="middle">
-        {pokemon.name} {'\n#' + pokemon.id}
-      </Text>
+    <Pressable onPress={onNavigationPress} style={{ flex: 1 }}>
+      <Card style={[styles.cardContainer, { backgroundColor: pokemon.color }]}>
+        <Text style={styles.name} variant="bodyLarge" lineBreakMode="middle">
+          {pokemon.name} {'\n#' + pokemon.id}
+        </Text>
 
-      {/* Pokeball bg */}
-      <View style={styles.pokeballContainer}>
-        <Image
-          source={require('../../../assets/pokeball-light.png')}
-          style={styles.pokeball}
-        />
-      </View>
+        {/* Pokeball bg */}
+        <View style={styles.pokeballContainer}>
+          <Image
+            source={require('../../../assets/pokeball-light.png')}
+            style={styles.pokeball}
+          />
+        </View>
 
-      {/* avatar img */}
-      <FadeInImage uri={pokemon.avatar} style={styles.pokemonImage} />
+        {/* avatar img */}
+        <FadeInImage uri={pokemon.avatar} style={styles.pokemonImage} />
 
-      <Text style={[styles.name, styles.avatarSpacing]}>
-        {pokemon.types[0]}
-      </Text>
-    </Card>
+        <Text style={[styles.name, styles.avatarSpacing]}>
+          {pokemon.types[0]}
+        </Text>
+      </Card>
+    </Pressable>
   );
 };
 
